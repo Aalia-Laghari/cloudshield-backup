@@ -30,7 +30,8 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
 .stApp, .stApp p, .stApp label, .stApp input, .stApp textarea, .stApp button, .stApp td, .stApp th { font-family: 'DM Sans', sans-serif; }
 .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp p.brand, .stApp p.ptitle, .stApp p.sect { font-family: 'Sora', sans-serif; letter-spacing: -0.01em; color: #0F1B33; }
-#MainMenu, footer, header[data-testid="stHeader"] { visibility: hidden; height: 0; }
+#MainMenu, footer, [data-testid="stToolbarActions"], [data-testid="stMainMenu"], [data-testid="stAppDeployButton"], [data-testid="stDecoration"] { visibility: hidden; }
+header[data-testid="stHeader"] { background: transparent; }
 .block-container { padding: 2rem 2.4rem 3rem; max-width: 1240px; }
 
 section[data-testid="stSidebar"] { background: #0F1B33; width: 17rem !important; }
