@@ -59,3 +59,11 @@ def test_repair_fails_when_both_replicas_lost(tmp_path):
     service.simulate_failure(b["id"], "B", "Delete replica")
     repairs, lost = service.repair_all()
     assert not repairs and len(lost) == 1
+
+
+def test_preview_read_does_not_write_audit(tmp_path):
+    service, db, _ = make_service(tmp_path)
+    b = service.create_backup("quiet.txt", b"quiet data")
+    before = len(db.list_audit())
+    service.read_valid_replica(b["id"], audit=False)
+    assert len(db.list_audit()) == before

@@ -83,7 +83,7 @@ class BackupService:
         self.db.add_audit("INTEGRITY_SCAN", "", f"Checked {len(results)} replica objects")
         return results
 
-    def read_valid_replica(self, backup_id):
+    def read_valid_replica(self, backup_id, audit=True):
         backup = self.db.get_backup(backup_id)
         if not backup:
             raise ValueError("Backup version not found.")
@@ -91,7 +91,8 @@ class BackupService:
             try:
                 data = self.storage.get(replica, key)
                 if sha256_bytes(data) == backup["sha256"]:
-                    self.db.add_audit("REPLICA_READ", backup["filename"], f"Recovered from replica {replica}, version={backup['version']}")
+                    if audit:
+                        self.db.add_audit("REPLICA_READ", backup["filename"], f"Recovered from replica {replica}, version={backup['version']}")
                     return data
             except Exception:
                 continue
@@ -156,6 +157,11 @@ class BackupService:
             raise ValueError("Unsupported failure simulation action.")
         self.db.add_audit("FAILURE_SIMULATED", backup["filename"],
                           f"version={backup['version']}; replica={replica}; action={action}")
+
+    def log_download(self, backup_id):
+        backup = self.db.get_backup(backup_id)
+        if backup:
+            self.db.add_audit("DOWNLOAD", backup["filename"], f"version={backup['version']}")
 
     def health_summary(self):
         return self.storage.health()
